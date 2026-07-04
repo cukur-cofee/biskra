@@ -603,8 +603,14 @@ function Card({
         <div className="mt-auto flex items-end justify-between gap-3">
           <div>
             <div
-              className="text-sm font-semibold line-through leading-none mb-1"
-              style={{ color: "rgba(255,100,100,0.85)", letterSpacing: "0.01em" }}
+              className="font-black leading-none mb-1.5 line-through"
+              style={{
+                color: "#ff4444",
+                fontSize: "17px",
+                textDecorationThickness: "2.5px",
+                textDecorationColor: "#ff4444",
+                letterSpacing: "0.01em",
+              }}
             >
               {offer.oldPrice} DA
             </div>
