@@ -138,6 +138,7 @@ const offers = [
     gradientFrom: "#000d20",
     gradientTo: "#001a40",
     image: "/images/lagoon-pack.png",
+    secondImage: "/images/mojito-bleu.png",
   },
   {
     id: 8,
