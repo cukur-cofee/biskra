@@ -136,7 +136,7 @@ const offers = [
     glowColor: "rgba(30,144,255,0.35)",
     gradientFrom: "#000d20",
     gradientTo: "#001a40",
-    image: "/images/milkshake.png",
+    image: "/images/lagoon-pack.png",
   },
   {
     id: 8,
