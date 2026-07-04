@@ -37,18 +37,6 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Quick Links */}
-          <div className="flex flex-col gap-6 items-center text-center md:items-start md:text-left">
-            <h4 className="font-heading text-lg uppercase tracking-widest text-foreground">Navigation</h4>
-            <div className="flex flex-col gap-3 items-center md:items-start">
-              {['Home', 'About', 'Menu', 'Gallery', 'Contact'].map((link) => (
-                <a key={link} href={`#${link.toLowerCase() === 'about' ? 'story' : link.toLowerCase()}`} className="text-foreground/60 hover:text-primary text-sm uppercase tracking-wider transition-colors">
-                  {link}
-                </a>
-              ))}
-            </div>
-          </div>
-
           {/* Contact */}
           <div className="flex flex-col gap-6 items-center text-center md:items-start md:text-left">
             <h4 className="font-heading text-lg uppercase tracking-widest text-foreground">Contact Us</h4>
