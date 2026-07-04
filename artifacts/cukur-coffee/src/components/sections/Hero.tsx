@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
-import heroImageMobile from "@assets/c450c24d-8db2-4ddb-8e4b-a213e1915c51_1783143932687.png";
-import heroImageDesktop from "@assets/639e978e-e565-44e7-884b-1923f8cd2610_1783143945724.png";
+const heroImageMobile = "https://res.cloudinary.com/sfdktww4/image/upload/hero-mobile.png";
+const heroImageDesktop = "https://res.cloudinary.com/sfdktww4/image/upload/hero-desktop.png";
 
 export default function Hero() {
   return (

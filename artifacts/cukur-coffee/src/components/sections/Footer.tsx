@@ -1,5 +1,5 @@
 import { Instagram, Facebook, MapPin, Phone, Clock } from "lucide-react";
-import logoPath from "@assets/d80f3400-7b6c-4a50-bc84-4091c470652c_1783143873962.png";
+const logoPath = "https://res.cloudinary.com/sfdktww4/image/upload/logo.png";
 
 function TikTokIcon(props: any) {
   return (
