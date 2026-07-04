@@ -40,6 +40,7 @@ jobs:
         env:
           BASE_PATH: /biskra/
           NODE_ENV: production
+          PORT: 3000
         run: pnpm run build
 
       - name: Setup Pages
