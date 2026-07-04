@@ -30,6 +30,7 @@ const boxes = [
     image: "https://res.cloudinary.com/sfdktww4/image/upload/box-donuts.png",
     desc: "24 mini donuts tendres, idéals pour partager",
     badge: "Populaire",
+    bigImage: true,
   },
   {
     id: 4,
@@ -39,6 +40,7 @@ const boxes = [
     image: "https://res.cloudinary.com/sfdktww4/image/upload/box-pancakes.png",
     desc: "24 mini pancakes moelleux, parfaits pour toute occasion",
     badge: null,
+    bigImage: true,
   },
 ];
 
@@ -92,7 +94,7 @@ function BoxCard({ box, index }: { box: (typeof boxes)[0]; index: number }) {
           alt={box.name}
           className="group-hover:scale-110 transition-transform duration-500"
           style={{
-            height: "140px",
+            height: box.bigImage ? "200px" : "140px",
             width: "100%",
             objectFit: "contain",
             filter: "drop-shadow(0 8px 24px rgba(0,0,0,0.5))",
