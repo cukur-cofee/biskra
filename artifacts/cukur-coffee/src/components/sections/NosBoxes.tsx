@@ -94,7 +94,7 @@ function BoxCard({ box, index }: { box: (typeof boxes)[0]; index: number }) {
           alt={box.name}
           className="group-hover:scale-110 transition-transform duration-500"
           style={{
-            height: box.bigImage ? "200px" : "140px",
+            height: box.bigImage ? "260px" : "140px",
             width: "100%",
             objectFit: "contain",
             filter: "drop-shadow(0 8px 24px rgba(0,0,0,0.5))",
