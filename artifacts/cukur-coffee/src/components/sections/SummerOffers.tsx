@@ -172,8 +172,9 @@ const offers = [
     glowColor: "rgba(255,215,0,0.35)",
     gradientFrom: "#181200",
     gradientTo: "#3a2d00",
-    image: "/images/frappuccino.png",
+    image: "/images/frappuccino-choco.png",
     secondImage: "/images/mojito-fruits.png",
+    thirdImage: "/images/jus-orange.png",
   },
 ];
 
@@ -493,8 +494,8 @@ function Card({
               src={offer.image}
               alt={offer.name}
               style={{
-                height: "170px",
-                width: "150px",
+                height: offer.thirdImage ? "130px" : "170px",
+                width: offer.thirdImage ? "110px" : "150px",
                 objectFit: "contain",
                 filter: isActive
                   ? `drop-shadow(0 0 24px ${offer.accent}66)`
@@ -504,7 +505,7 @@ function Card({
             />
             <span
               className="font-black leading-none"
-              style={{ color: offer.accent, fontSize: "28px" }}
+              style={{ color: offer.accent, fontSize: offer.thirdImage ? "22px" : "28px" }}
             >
               +
             </span>
@@ -512,8 +513,8 @@ function Card({
               src={offer.secondImage}
               alt={`${offer.name} extra`}
               style={{
-                height: "170px",
-                width: "150px",
+                height: offer.thirdImage ? "130px" : "170px",
+                width: offer.thirdImage ? "110px" : "150px",
                 objectFit: "contain",
                 filter: isActive
                   ? `drop-shadow(0 0 24px ${offer.accent}66)`
@@ -521,6 +522,29 @@ function Card({
                 transition: "filter 0.5s ease",
               }}
             />
+            {offer.thirdImage && (
+              <>
+                <span
+                  className="font-black leading-none"
+                  style={{ color: offer.accent, fontSize: "22px" }}
+                >
+                  +
+                </span>
+                <img
+                  src={offer.thirdImage}
+                  alt={`${offer.name} third`}
+                  style={{
+                    height: "130px",
+                    width: "110px",
+                    objectFit: "contain",
+                    filter: isActive
+                      ? `drop-shadow(0 0 24px ${offer.accent}66)`
+                      : "none",
+                    transition: "filter 0.5s ease",
+                  }}
+                />
+              </>
+            )}
           </div>
         ) : (
           <img
