@@ -119,7 +119,7 @@ const offers = [
     glowColor: "rgba(255,140,0,0.35)",
     gradientFrom: "#1a0800",
     gradientTo: "#3d1800",
-    image: "/images/tropical-mix.png",
+    image: "/images/juice.png",
   },
   {
     id: 7,
@@ -136,7 +136,7 @@ const offers = [
     glowColor: "rgba(30,144,255,0.35)",
     gradientFrom: "#000d20",
     gradientTo: "#001a40",
-    image: "/images/blue-summer.png",
+    image: "/images/milkshake.png",
   },
   {
     id: 8,
@@ -170,7 +170,8 @@ const offers = [
     glowColor: "rgba(255,215,0,0.35)",
     gradientFrom: "#181200",
     gradientTo: "#3a2d00",
-    image: "/images/cool-vibes.png",
+    image: "/images/frappuccino.png",
+    secondImage: "/images/mojito-fruits.png",
   },
 ];
 
