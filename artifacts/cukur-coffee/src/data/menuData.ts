@@ -44,28 +44,28 @@ export const menuData = {
     { name: "Matcha au choix", price: "500", category: "Thé" },
 
     // Milkshake
-    { name: "Chocolat Banane", price: "45", category: "Milkshake" },
-    { name: "Vanille", price: "40", category: "Milkshake" },
-    { name: "Caramel", price: "40", category: "Milkshake" },
-    { name: "Fruits", price: "50", category: "Milkshake" },
-    { name: "Mangue", price: "50", category: "Milkshake" },
-    { name: "Oreo", price: "45", category: "Milkshake" },
-    { name: "Lotus", price: "60", category: "Milkshake" },
+    { name: "Chocolat Banane", price: "450", category: "Milkshake" },
+    { name: "Vanille", price: "400", category: "Milkshake" },
+    { name: "Caramel", price: "400", category: "Milkshake" },
+    { name: "Fruits", price: "500", category: "Milkshake" },
+    { name: "Mangue", price: "500", category: "Milkshake" },
+    { name: "Oreo", price: "450", category: "Milkshake" },
+    { name: "Lotus", price: "600", category: "Milkshake" },
 
     // Frappuccino
-    { name: "Chocolat", price: "35", category: "Frappuccino" },
-    { name: "Caramel", price: "35", category: "Frappuccino" },
-    { name: "Vanille", price: "35", category: "Frappuccino" },
-    { name: "Fruits", price: "45", category: "Frappuccino" },
+    { name: "Chocolat", price: "350", category: "Frappuccino" },
+    { name: "Caramel", price: "350", category: "Frappuccino" },
+    { name: "Vanille", price: "350", category: "Frappuccino" },
+    { name: "Fruits", price: "450", category: "Frappuccino" },
 
     // Jus Naturel
-    { name: "Orange", price: "30", category: "Jus Naturel" },
-    { name: "Citron", price: "25", category: "Jus Naturel" },
-    { name: "Banane", price: "30", category: "Jus Naturel" },
-    { name: "Fraise", price: "40", category: "Jus Naturel" },
-    { name: "Ananas", price: "40", category: "Jus Naturel" },
-    { name: "Cocktail de fruits", price: "50", category: "Jus Naturel" },
-    { name: "Çukur", price: "70", category: "Jus Naturel" },
+    { name: "Orange", price: "300", category: "Jus Naturel" },
+    { name: "Citron", price: "250", category: "Jus Naturel" },
+    { name: "Banane", price: "300", category: "Jus Naturel" },
+    { name: "Fraise", price: "400", category: "Jus Naturel" },
+    { name: "Ananas", price: "400", category: "Jus Naturel" },
+    { name: "Cocktail de fruits", price: "500", category: "Jus Naturel" },
+    { name: "Çukur", price: "700", category: "Jus Naturel" },
 
     // Cocktail
     { name: "Piña Colada", price: "600", category: "Cocktail" },
