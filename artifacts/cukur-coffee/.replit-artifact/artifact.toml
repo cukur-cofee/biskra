@@ -1,0 +1,27 @@
+kind = "web"
+previewPath = "/"
+title = "Çukur Coffee"
+version = "1.0.0"
+id = "artifacts/cukur-coffee"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 19493
+
+[services.development]
+run = "pnpm --filter @workspace/cukur-coffee run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/cukur-coffee", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/cukur-coffee/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "19493"
+BASE_PATH = "/"

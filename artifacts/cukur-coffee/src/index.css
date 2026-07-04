@@ -1,0 +1,164 @@
+@import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Inter:wght@300;400;500;600;700&family=Oswald:wght@400;500;600;700&display=swap');
+
+@import "tailwindcss";
+@import "tw-animate-css";
+@plugin "@tailwindcss/typography";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+  --color-card-border: hsl(var(--card-border));
+
+  --color-popover: hsl(var(--popover));
+  --color-popover-foreground: hsl(var(--popover-foreground));
+  --color-popover-border: hsl(var(--popover-border));
+
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+  --color-primary-border: var(--primary-border);
+
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+  --color-secondary-border: var(--secondary-border);
+
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+  --color-muted-border: var(--muted-border);
+
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+  --color-accent-border: var(--accent-border);
+
+  --color-destructive: hsl(var(--destructive));
+  --color-destructive-foreground: hsl(var(--destructive-foreground));
+  --color-destructive-border: var(--destructive-border);
+
+  --font-sans: 'Inter', sans-serif;
+  --font-heading: 'Oswald', sans-serif;
+  --font-script: 'Great Vibes', cursive;
+  
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.5rem;
+}
+
+:root {
+  --background: 0 0% 4%; /* #0B0B0B */
+  --foreground: 37 57% 89%; /* #F5E8D3 */
+  
+  --card: 0 0% 9%; /* #161616 */
+  --card-foreground: 37 57% 89%;
+  --card-border: 38 46% 60%; /* Warm Gold, maybe drop opacity */
+  
+  --popover: 0 0% 9%;
+  --popover-foreground: 37 57% 89%;
+  --popover-border: 38 46% 60%;
+  
+  --primary: 38 46% 60%; /* Warm Gold */
+  --primary-foreground: 0 0% 4%;
+  
+  --secondary: 0 0% 15%; 
+  --secondary-foreground: 37 57% 89%;
+  
+  --muted: 0 0% 12%;
+  --muted-foreground: 37 57% 60%;
+  
+  --accent: 38 46% 60%;
+  --accent-foreground: 0 0% 4%;
+  
+  --destructive: 0 100% 50%;
+  --destructive-foreground: 0 0% 100%;
+  
+  --border: 0 0% 15%;
+  --input: 0 0% 15%;
+  --ring: 38 46% 60%;
+  
+  --radius: 0.5rem;
+}
+
+.dark {
+  --background: 0 0% 4%; /* #0B0B0B */
+  --foreground: 37 57% 89%; /* #F5E8D3 */
+  
+  --card: 0 0% 9%; /* #161616 */
+  --card-foreground: 37 57% 89%;
+  --card-border: 0 0% 20%; 
+  
+  --popover: 0 0% 9%;
+  --popover-foreground: 37 57% 89%;
+  --popover-border: 0 0% 20%;
+  
+  --primary: 38 46% 60%; /* Warm Gold */
+  --primary-foreground: 0 0% 4%;
+  
+  --secondary: 0 0% 15%; 
+  --secondary-foreground: 37 57% 89%;
+  
+  --muted: 0 0% 12%;
+  --muted-foreground: 37 57% 60%;
+  
+  --accent: 38 46% 60%;
+  --accent-foreground: 0 0% 4%;
+  
+  --destructive: 0 100% 50%;
+  --destructive-foreground: 0 0% 100%;
+  
+  --border: 0 0% 15%;
+  --input: 0 0% 15%;
+  --ring: 38 46% 60%;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground font-sans antialiased selection:bg-primary selection:text-primary-foreground;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-heading tracking-wider;
+  }
+}
+
+@layer components {
+  .input-base {
+    @apply bg-card/50 border border-primary/15 rounded-lg px-4 py-3 text-sm text-foreground placeholder:text-foreground/25 focus:outline-none focus:border-primary/50 transition-colors w-full;
+  }
+}
+
+.glass-card {
+  @apply bg-card/80 backdrop-blur-md border border-primary/20;
+}
+
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+.text-gold {
+  color: hsl(var(--primary));
+}
+.border-gold {
+  border-color: hsl(var(--primary));
+}
+
+.marquee-track {
+  width: max-content;
+  animation: marquee-rtl 60s linear infinite;
+}
+
+@keyframes marquee-rtl {
+  from {
+    transform: translateX(0%);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
