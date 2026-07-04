@@ -5,6 +5,7 @@ import Features from "@/components/sections/Features";
 import Menu from "@/components/sections/Menu";
 import SummerOffers from "@/components/sections/SummerOffers";
 import BuildYourRecipe from "@/components/sections/BuildYourRecipe";
+import NosBoxes from "@/components/sections/NosBoxes";
 import Story from "@/components/sections/Story";
 import Stats from "@/components/sections/Stats";
 import Footer from "@/components/sections/Footer";
@@ -20,6 +21,7 @@ export default function Home() {
         <Menu />
         <SummerOffers />
         <BuildYourRecipe />
+        <NosBoxes />
         <Story />
         <Stats />
       </main>
