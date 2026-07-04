@@ -1,7 +1,10 @@
 import { useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
-const loaderVideo = "https://res.cloudinary.com/sfdktww4/video/upload/intro-video.mp4";
+// f_auto,q_auto:low,w_1280 → Cloudinary يختار أفضل صيغة بجودة منخفضة وعرض 1280px
+const loaderVideo = "https://res.cloudinary.com/sfdktww4/video/upload/f_auto,q_auto:low,w_1280/intro-video.mp4";
+// أول فريم من الفيديو كصورة ظاهرة فوراً قبل التحميل
+const loaderPoster = "https://res.cloudinary.com/sfdktww4/video/upload/so_0,f_jpg,q_auto:low,w_1280/intro-video.jpg";
 
 interface VideoLoaderProps {
   onFinished: () => void;
@@ -17,8 +20,8 @@ export default function VideoLoader({ onFinished }: VideoLoaderProps) {
     const handleEnd = () => onFinished();
     video.addEventListener("ended", handleEnd);
 
-    // fallback: إذا تأخر الفيديو أكثر من 8 ثواني
-    const timeout = setTimeout(onFinished, 8000);
+    // إذا تأخر التحميل أكثر من 4 ثواني نعدي مباشرة
+    const timeout = setTimeout(onFinished, 4000);
 
     return () => {
       video.removeEventListener("ended", handleEnd);
@@ -36,9 +39,11 @@ export default function VideoLoader({ onFinished }: VideoLoaderProps) {
       <video
         ref={videoRef}
         src={loaderVideo}
+        poster={loaderPoster}
         autoPlay
         muted
         playsInline
+        preload="auto"
         className="w-full h-full object-cover"
       />
     </motion.div>
