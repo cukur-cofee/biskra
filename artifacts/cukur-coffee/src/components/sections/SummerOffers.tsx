@@ -30,8 +30,8 @@ const offers = [
     glowColor: "rgba(0,212,255,0.35)",
     gradientFrom: "#001828",
     gradientTo: "#00334d",
-    image: "/images/blue-summer.png",
-    secondImage: "/images/mini-pancakes.png",
+    image: "https://res.cloudinary.com/sfdktww4/image/upload/blue-summer.png",
+    secondImage: "https://res.cloudinary.com/sfdktww4/image/upload/mini-pancakes.png",
   },
   {
     id: 2,
@@ -48,8 +48,8 @@ const offers = [
     glowColor: "rgba(255,95,160,0.35)",
     gradientFrom: "#1e0015",
     gradientTo: "#450030",
-    image: "/images/pink-summer.png",
-    secondImage: "/images/mini-donuts.png",
+    image: "https://res.cloudinary.com/sfdktww4/image/upload/pink-summer.png",
+    secondImage: "https://res.cloudinary.com/sfdktww4/image/upload/mini-donuts.png",
   },
   {
     id: 3,
@@ -66,8 +66,8 @@ const offers = [
     glowColor: "rgba(255,184,0,0.35)",
     gradientFrom: "#1a1000",
     gradientTo: "#3d2800",
-    image: "/images/tropical-mix.png",
-    secondImage: "/images/jus-ananas.png",
+    image: "https://res.cloudinary.com/sfdktww4/image/upload/tropical-mix.png",
+    secondImage: "https://res.cloudinary.com/sfdktww4/image/upload/jus-ananas.png",
   },
   {
     id: 4,
@@ -84,8 +84,8 @@ const offers = [
     glowColor: "rgba(0,232,160,0.35)",
     gradientFrom: "#001510",
     gradientTo: "#003828",
-    image: "/images/cool-vibes.png",
-    secondImage: "/images/mojito-fruits.png",
+    image: "https://res.cloudinary.com/sfdktww4/image/upload/cool-vibes.png",
+    secondImage: "https://res.cloudinary.com/sfdktww4/image/upload/mojito-fruits.png",
   },
   {
     id: 5,
@@ -102,8 +102,8 @@ const offers = [
     glowColor: "rgba(255,58,58,0.35)",
     gradientFrom: "#1e0000",
     gradientTo: "#4a0000",
-    image: "/images/red-fresh.png",
-    secondImage: "/images/mojito-rouge.png",
+    image: "https://res.cloudinary.com/sfdktww4/image/upload/red-fresh.png",
+    secondImage: "https://res.cloudinary.com/sfdktww4/image/upload/mojito-rouge.png",
   },
   {
     id: 6,
@@ -120,7 +120,7 @@ const offers = [
     glowColor: "rgba(255,140,0,0.35)",
     gradientFrom: "#1a0800",
     gradientTo: "#3d1800",
-    image: "/images/tropic-dream.png",
+    image: "https://res.cloudinary.com/sfdktww4/image/upload/tropic-dream.png",
   },
   {
     id: 7,
@@ -137,8 +137,8 @@ const offers = [
     glowColor: "rgba(30,144,255,0.35)",
     gradientFrom: "#000d20",
     gradientTo: "#001a40",
-    image: "/images/lagoon-pack.png",
-    secondImage: "/images/mojito-bleu.png",
+    image: "https://res.cloudinary.com/sfdktww4/image/upload/lagoon-pack.png",
+    secondImage: "https://res.cloudinary.com/sfdktww4/image/upload/mojito-bleu.png",
   },
   {
     id: 8,
@@ -155,7 +155,7 @@ const offers = [
     glowColor: "rgba(255,112,192,0.35)",
     gradientFrom: "#1a0012",
     gradientTo: "#40002a",
-    image: "/images/duo-summer.png",
+    image: "https://res.cloudinary.com/sfdktww4/image/upload/duo-summer.png",
   },
   {
     id: 9,
@@ -172,9 +172,9 @@ const offers = [
     glowColor: "rgba(255,215,0,0.35)",
     gradientFrom: "#181200",
     gradientTo: "#3a2d00",
-    image: "/images/frappuccino-choco.png",
-    secondImage: "/images/mojito-fruits.png",
-    thirdImage: "/images/jus-orange.png",
+    image: "https://res.cloudinary.com/sfdktww4/image/upload/frappuccino-choco.png",
+    secondImage: "https://res.cloudinary.com/sfdktww4/image/upload/mojito-fruits.png",
+    thirdImage: "https://res.cloudinary.com/sfdktww4/image/upload/jus-orange.png",
   },
 ];
 

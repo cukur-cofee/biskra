@@ -6,12 +6,12 @@ import { useCart } from "@/context/CartContext";
 
 const getCategoryImage = (cat: string) => {
   const images: Record<string, string> = {
-    "Café": "/images/espresso.png",
-    "Milkshake": "/images/milkshake.png",
-    "Frappuccino": "/images/frappuccino.png",
-    "Jus Naturel": "/images/juice.png",
+    "Café": "https://res.cloudinary.com/sfdktww4/image/upload/espresso.png",
+    "Milkshake": "https://res.cloudinary.com/sfdktww4/image/upload/milkshake.png",
+    "Frappuccino": "https://res.cloudinary.com/sfdktww4/image/upload/frappuccino.png",
+    "Jus Naturel": "https://res.cloudinary.com/sfdktww4/image/upload/juice.png",
   };
-  return images[cat] || "/images/espresso.png";
+  return images[cat] || "https://res.cloudinary.com/sfdktww4/image/upload/espresso.png";
 };
 
 const slideVariants = {

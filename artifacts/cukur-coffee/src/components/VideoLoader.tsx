@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import loaderVideo from "@assets/video_202607040648_1783144094217.mp4";
+
+const loaderVideo = "https://res.cloudinary.com/sfdktww4/video/upload/intro-video.mp4";
 
 interface VideoLoaderProps {
   onFinished: () => void;
