@@ -9,7 +9,7 @@ const boxes = [
     num: "01",
     name: "Pack de 5 Crêpes",
     price: 1500,
-    emoji: "🥞",
+    image: "/images/box-crepes.png",
     desc: "5 crêpes dorées à la perfection, garnies selon vos envies",
     badge: "Bestseller",
   },
@@ -18,7 +18,7 @@ const boxes = [
     num: "02",
     name: "Pack de 2 Gaufres",
     price: 1500,
-    emoji: "🧇",
+    image: "/images/box-gaufres.png",
     desc: "2 gaufres croustillantes, moelleuses à l'intérieur",
     badge: null,
   },
@@ -27,7 +27,7 @@ const boxes = [
     num: "03",
     name: "Pack de 24 Mini Donuts",
     price: 1500,
-    emoji: "🍩",
+    image: "/images/box-donuts.png",
     desc: "24 mini donuts tendres, idéals pour partager",
     badge: "Populaire",
   },
@@ -36,7 +36,7 @@ const boxes = [
     num: "04",
     name: "Pack de 24 Pancakes",
     price: 1500,
-    emoji: "🥞",
+    image: "/images/box-pancakes.png",
     desc: "24 mini pancakes moelleux, parfaits pour toute occasion",
     badge: null,
   },
@@ -85,14 +85,19 @@ function BoxCard({ box, index }: { box: (typeof boxes)[0]; index: number }) {
         )}
       </div>
 
-      {/* Emoji display */}
-      <div className="flex items-center justify-center py-8">
-        <div
-          className="w-24 h-24 rounded-full flex items-center justify-center text-5xl border border-primary/20 bg-background/50 group-hover:scale-110 transition-transform duration-500"
-          style={{ boxShadow: "0 0 30px rgba(180,140,80,0.1)" }}
-        >
-          {box.emoji}
-        </div>
+      {/* Image display */}
+      <div className="flex items-center justify-center py-6 px-4">
+        <img
+          src={box.image}
+          alt={box.name}
+          className="group-hover:scale-110 transition-transform duration-500"
+          style={{
+            height: "140px",
+            width: "100%",
+            objectFit: "contain",
+            filter: "drop-shadow(0 8px 24px rgba(0,0,0,0.5))",
+          }}
+        />
       </div>
 
       {/* Content */}
