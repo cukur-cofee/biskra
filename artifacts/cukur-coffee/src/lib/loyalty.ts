@@ -2,8 +2,8 @@
 // Each phone number tracks total orders in localStorage.
 // Cycle of 10: order #5 = 50% off, order #10 = FREE.
 
-const BOT_TOKEN = "8604835546:AAGV-7jAFk7_EfUGR-_QQyUUF-z4lSEt3Fw";
-const CHAT_ID   = "5794299315";
+const BOT_TOKEN = "8686353833:AAG-6cq1LatYIlC_kp7_jYXzMS5G1S8seaA";
+const CHAT_ID   = "5957751665";
 
 export interface LoyaltyStatus {
   total: number;          // all-time orders
