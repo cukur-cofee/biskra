@@ -4,7 +4,7 @@ const BASE_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
 
 // ─── Cloudinary ────────────────────────────────────────────
 const CLOUDINARY_CLOUD = "sfdktww4";
-const CLOUDINARY_PRESET = "biskra_offers"; // create unsigned preset with this name in Cloudinary dashboard
+const CLOUDINARY_PRESET = "cukurcofee";
 
 export async function uploadToCloudinary(file: File): Promise<string> {
   const fd = new FormData();
