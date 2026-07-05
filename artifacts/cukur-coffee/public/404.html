@@ -5,18 +5,28 @@
   <title>Çukur Coffee</title>
   <script>
     // GitHub Pages SPA redirect for https://cukur-cofee.github.io/biskra/
-    var pathArray = window.location.pathname.split('/').filter(Boolean);
+    var pathname = window.location.pathname;
+    
+    // Decode the pathname in case it's encoded
+    var decodedPath = decodeURIComponent(pathname);
+    
+    var pathArray = decodedPath.split('/').filter(Boolean);
     var repoIndex = pathArray.indexOf('biskra');
     
     // Extract the route after /biskra/
     var route = '/' + pathArray.slice(repoIndex + 1).join('/');
     
-    // Redirect to index.html with the route preserved
-    window.location.replace(
-      '/biskra/?p=' + encodeURIComponent(route) +
-      (window.location.search ? '&q=' + window.location.search.slice(1) : '') +
-      window.location.hash
-    );
+    // If route is just "/", don't pass it as a param
+    if (route === '/') {
+      window.location.replace('/biskra/');
+    } else {
+      // Redirect to index.html with the route preserved
+      window.location.replace(
+        '/biskra/?p=' + encodeURIComponent(route) +
+        (window.location.search ? '&q=' + window.location.search.slice(1) : '') +
+        window.location.hash
+      );
+    }
   </script>
 </head>
 <body></body>
