@@ -429,19 +429,6 @@ function OffersTab({
 
           {/* Upload from phone */}
           <CloudinaryUpload onUploaded={url => setForm(f => ({ ...f, image: url }))} />
-
-          {/* OR paste URL manually */}
-          <div className="flex items-center gap-2 my-1">
-            <div className="flex-1 h-px bg-white/10"/>
-            <span className="text-white/20 text-[10px]">أو أدخل الرابط يدوياً</span>
-            <div className="flex-1 h-px bg-white/10"/>
-          </div>
-          <input
-            value={form.image}
-            onChange={e => setForm(f => ({ ...f, image: e.target.value }))}
-            placeholder="https://res.cloudinary.com/..."
-            className="bg-white/10 border border-white/20 focus:border-primary rounded-lg px-3 py-2 text-white text-sm outline-none"
-          />
           {form.image && (
             <img src={form.image} alt="preview"
               className="w-full h-28 object-cover rounded-xl border border-white/10 mt-1"/>
