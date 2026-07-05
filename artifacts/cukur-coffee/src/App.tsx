@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback } from "react";
-import { Switch, Route, Router as WouterRouter } from "wouter";
+import { Switch, Route, Router as WouterRouter, useLocation } from "wouter";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { AnimatePresence } from "framer-motion";
 import { Toaster } from "@/components/ui/toaster";
@@ -24,23 +24,13 @@ function Router() {
   );
 }
 
-function App() {
-  // Support both direct pathname and hash-based routing
-  const pathname = window.location.pathname;
-  const isAdmin = pathname.includes("/admin") || window.location.hash === "#/admin";
+function AppContent() {
+  const [location] = useLocation();
+  const isAdmin = location === "/admin";
   const [loading, setLoading] = useState(!isAdmin);
 
   useEffect(() => {
     document.documentElement.classList.add("dark");
-    
-    // Handle redirect from 404.html with query parameter
-    const params = new URLSearchParams(window.location.search);
-    const redirectPath = params.get('p');
-    
-    if (redirectPath && redirectPath !== '/') {
-      // Update the URL without reloading
-      window.history.replaceState(null, '', window.location.pathname.replace(/\/$/, '') + redirectPath);
-    }
   }, []);
 
   const handleLoaderFinished = useCallback(() => {
@@ -48,21 +38,29 @@ function App() {
   }, []);
 
   return (
+    <>
+      <AnimatePresence>
+        {loading && (
+          <VideoLoader key="loader" onFinished={handleLoaderFinished} />
+        )}
+      </AnimatePresence>
+      <CartProvider>
+        <CartDrawer />
+        <Toaster />
+      </CartProvider>
+    </>
+  );
+}
+
+function App() {
+  return (
     <QueryClientProvider client={queryClient}>
       <AdminDataProvider>
         <TooltipProvider>
-          <AnimatePresence>
-            {loading && (
-              <VideoLoader key="loader" onFinished={handleLoaderFinished} />
-            )}
-          </AnimatePresence>
-          <CartProvider>
-            <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, "")}>
-              <Router />
-            </WouterRouter>
-            <CartDrawer />
-            <Toaster />
-          </CartProvider>
+          <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, "")} hashBased>
+            <Router />
+            <AppContent />
+          </WouterRouter>
         </TooltipProvider>
       </AdminDataProvider>
     </QueryClientProvider>
