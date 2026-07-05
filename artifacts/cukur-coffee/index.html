@@ -16,7 +16,7 @@
           });
           window.history.replaceState(
             null, null,
-            window.location.pathname + path + query + window.location.hash
+            window.location.pathname.replace(/\/+$/, '') + path + query + window.location.hash
           );
         }
       })();
