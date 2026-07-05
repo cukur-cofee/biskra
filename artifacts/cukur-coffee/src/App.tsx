@@ -25,7 +25,8 @@ function Router() {
 }
 
 function App() {
-  const [loading, setLoading] = useState(true);
+  const isAdmin = window.location.pathname.endsWith("/admin");
+  const [loading, setLoading] = useState(!isAdmin);
 
   useEffect(() => {
     document.documentElement.classList.add("dark");
