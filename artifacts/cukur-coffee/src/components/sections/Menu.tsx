@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Plus } from "lucide-react";
 import { menuData } from "@/data/menuData";
 import { useCart } from "@/context/CartContext";
+import { useAdminData } from "@/context/AdminDataContext";
 
 const getCategoryImage = (cat: string) => {
   const images: Record<string, string> = {
@@ -49,9 +50,14 @@ export default function Menu() {
   const [direction, setDirection] = useState(0);
   const tabsRef = useRef<HTMLDivElement>(null);
   const activeTabRef = useRef<HTMLButtonElement | null>(null);
+  const { menuOverrides, promos } = useAdminData();
 
   const activeIndex = menuData.categories.indexOf(activeCategory);
-  const activeItems = menuData.items.filter((item) => item.category === activeCategory);
+  const rawItems = menuData.items.filter((item) => item.category === activeCategory);
+  const activeItems = rawItems.map(item => ({
+    ...item,
+    price: menuOverrides[item.name] ?? item.price,
+  }));
   const isFirstRender = useRef(true);
 
   const handleCategoryChange = (cat: string) => {
@@ -148,9 +154,16 @@ export default function Menu() {
                       {activeItems.map((item, idx) => (
                         <div key={idx} className="group flex items-center gap-3">
                           <div className="flex-1 flex items-end justify-between gap-4">
-                            <h4 className="font-heading text-lg tracking-wider text-foreground group-hover:text-primary transition-colors">
-                              {item.name}
-                            </h4>
+                            <div className="flex items-center gap-2">
+                              <h4 className="font-heading text-lg tracking-wider text-foreground group-hover:text-primary transition-colors">
+                                {item.name}
+                              </h4>
+                              {promos[item.name] && (
+                                <span className="bg-red-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full leading-none">
+                                  {promos[item.name]}
+                                </span>
+                              )}
+                            </div>
                             <div className="flex-grow border-b border-dashed border-primary/20 relative top-[-6px]" />
                             <span className="font-heading text-xl text-primary whitespace-nowrap">
                               {item.price}{" "}
@@ -273,10 +286,15 @@ export default function Menu() {
                         {String(idx + 1).padStart(2, "0")}
                       </span>
                     </div>
-                    <div className="flex-1 px-4 py-3.5">
+                    <div className="flex-1 px-4 py-3.5 flex items-center gap-2">
                       <span className="font-heading text-[15px] tracking-wide text-foreground/90 group-hover:text-primary transition-colors">
                         {item.name}
                       </span>
+                      {promos[item.name] && (
+                        <span className="bg-red-500 text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full leading-none flex-shrink-0">
+                          {promos[item.name]}
+                        </span>
+                      )}
                     </div>
                     <div className="flex items-center gap-3 px-3 bg-primary/5 border-l border-primary/10">
                       <div className="text-right">

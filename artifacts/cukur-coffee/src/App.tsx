@@ -6,7 +6,9 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import NotFound from "@/pages/not-found";
 import Home from "@/pages/Home";
+import Dashboard from "@/pages/Dashboard";
 import { CartProvider } from "@/context/CartContext";
+import { AdminDataProvider } from "@/context/AdminDataContext";
 import CartDrawer from "@/components/CartDrawer";
 import VideoLoader from "@/components/VideoLoader";
 
@@ -15,6 +17,7 @@ const queryClient = new QueryClient();
 function Router() {
   return (
     <Switch>
+      <Route path="/admin" component={Dashboard} />
       <Route path="/" component={Home} />
       <Route component={NotFound} />
     </Switch>
@@ -34,20 +37,22 @@ function App() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <AnimatePresence>
-          {loading && (
-            <VideoLoader key="loader" onFinished={handleLoaderFinished} />
-          )}
-        </AnimatePresence>
-        <CartProvider>
-          <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, "")}>
-            <Router />
-          </WouterRouter>
-          <CartDrawer />
-          <Toaster />
-        </CartProvider>
-      </TooltipProvider>
+      <AdminDataProvider>
+        <TooltipProvider>
+          <AnimatePresence>
+            {loading && (
+              <VideoLoader key="loader" onFinished={handleLoaderFinished} />
+            )}
+          </AnimatePresence>
+          <CartProvider>
+            <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, "")}>
+              <Router />
+            </WouterRouter>
+            <CartDrawer />
+            <Toaster />
+          </CartProvider>
+        </TooltipProvider>
+      </AdminDataProvider>
     </QueryClientProvider>
   );
 }

@@ -13,6 +13,7 @@ import {
   ShoppingCart,
 } from "lucide-react";
 import { useCart } from "@/context/CartContext";
+import { useAdminData } from "@/context/AdminDataContext";
 
 const offers = [
   {
@@ -180,25 +181,55 @@ const offers = [
 
 type Offer = (typeof offers)[0];
 
+function normalizeExtraOffer(eo: { id: number; name: string; oldPrice: number; newPrice: number; items: string[]; image: string; accent?: string; tagline?: string }, idx: number): Offer {
+  const accent = eo.accent ?? "#c8a56a";
+  const r = parseInt(accent.slice(1, 3), 16) || 200;
+  const g = parseInt(accent.slice(3, 5), 16) || 165;
+  const b = parseInt(accent.slice(5, 7), 16) || 106;
+  const discount = eo.oldPrice > 0 ? Math.round((1 - eo.newPrice / eo.oldPrice) * 100) : 0;
+  return {
+    id: eo.id,
+    num: String(10 + idx).padStart(2, "0"),
+    icon: Star,
+    name: eo.name,
+    oldPrice: eo.oldPrice,
+    newPrice: eo.newPrice,
+    discount,
+    items: eo.items,
+    tagline: eo.tagline ?? "",
+    accent,
+    accentDark: accent,
+    glowColor: `rgba(${r},${g},${b},0.35)`,
+    gradientFrom: "#0a0808",
+    gradientTo: "#1a1515",
+    image: eo.image,
+  };
+}
+
 export default function SummerOffers() {
   const [active, setActive] = useState(1);
   const [added, setAdded] = useState<number | null>(null);
   const autoRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const { addItem } = useCart();
+  const { extraOffers } = useAdminData();
+
+  const allOffers = [...offers, ...extraOffers.map(normalizeExtraOffer)];
+  const total = allOffers.length;
 
   const goTo = useCallback((idx: number) => {
     setActive(idx);
   }, []);
 
-  const prev = () => goTo((active - 1 + offers.length) % offers.length);
-  const next = () => goTo((active + 1) % offers.length);
+  const prev = () => goTo((active - 1 + total) % total);
+  const next = () => goTo((active + 1) % total);
 
   useEffect(() => {
     autoRef.current = setInterval(() => {
-      setActive((a) => (a + 1) % offers.length);
+      setActive((a) => (a + 1) % total);
     }, 4000);
     return () => { if (autoRef.current) clearInterval(autoRef.current); };
-  }, []);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [total]);
 
   const handleAddToCart = (offer: Offer) => {
     if (!offer.newPrice) return;
@@ -211,11 +242,11 @@ export default function SummerOffers() {
     setTimeout(() => setAdded(null), 1800);
     if (autoRef.current) clearInterval(autoRef.current);
     autoRef.current = setInterval(() => {
-      setActive((a) => (a + 1) % offers.length);
+      setActive((a) => (a + 1) % total);
     }, 4000);
   };
 
-  const current = offers[active];
+  const current = allOffers[Math.min(active, total - 1)];
 
   return (
     <section
@@ -287,9 +318,8 @@ export default function SummerOffers() {
           perspectiveOrigin: "50% 50%",
         }}
       >
-        {offers.map((offer, i) => {
+        {allOffers.map((offer, i) => {
           let offset = i - active;
-          const total = offers.length;
           if (offset > total / 2) offset -= total;
           if (offset < -total / 2) offset += total;
           const abs = Math.abs(offset);
@@ -352,7 +382,7 @@ export default function SummerOffers() {
           </button>
 
           <div className="flex gap-2 items-center">
-            {offers.map((_, i) => (
+            {allOffers.map((_, i) => (
               <button
                 key={i}
                 onClick={() => goTo(i)}
