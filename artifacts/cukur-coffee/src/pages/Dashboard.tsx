@@ -1,8 +1,8 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Save, LogOut, Plus, Trash2, Tag, Coffee, Sun, Check, Loader2, Eye, EyeOff } from "lucide-react";
+import { Save, LogOut, Plus, Trash2, Tag, Coffee, Sun, Check, Loader2, Eye, EyeOff, Upload, ImageIcon, Pencil } from "lucide-react";
 import { menuData } from "@/data/menuData";
-import { saveAdminData, fetchAdminData, type AdminData, type ExtraOffer } from "@/lib/jsonbin";
+import { saveAdminData, fetchAdminData, uploadToCloudinary, type AdminData, type ExtraOffer } from "@/lib/jsonbin";
 import { useAdminData } from "@/context/AdminDataContext";
 
 const ADMIN_PASSWORD = "cukur2026";
@@ -63,17 +63,20 @@ function LoginScreen({ onLogin }: { onLogin: () => void }) {
 type Tab = "menu" | "promos" | "offers";
 
 const tabs: { id: Tab; label: string; icon: React.ElementType }[] = [
-  { id: "menu",   label: "الأسعار",         icon: Coffee },
-  { id: "promos", label: "الملصقات",         icon: Tag   },
-  { id: "offers", label: "عروض الصيف",       icon: Sun   },
+  { id: "menu",   label: "الأسعار والأسماء", icon: Coffee },
+  { id: "promos", label: "الملصقات",          icon: Tag   },
+  { id: "offers", label: "عروض الصيف",        icon: Sun   },
 ];
 
-// ─── Menu Tab ─────────────────────────────────────────────
+// ─── Menu Tab (price + name editing) ──────────────────────
 function MenuTab({
   overrides, setOverrides,
+  nameOverrides, setNameOverrides,
 }: {
   overrides: Record<string, string>;
   setOverrides: (v: Record<string, string>) => void;
+  nameOverrides: Record<string, string>;
+  setNameOverrides: (v: Record<string, string>) => void;
 }) {
   const [activeCategory, setActiveCategory] = useState(menuData.categories[0]);
   const items = menuData.items.filter(i => i.category === activeCategory);
@@ -96,40 +99,73 @@ function MenuTab({
 
       {/* items */}
       <div className="flex-1 flex flex-col gap-2 overflow-y-auto">
+        <p className="text-white/30 text-[11px] mb-1 flex items-center gap-1">
+          <Pencil size={11}/> يمكنك تعديل اسم المنتج والسعر — اتركه فارغاً للإبقاء على الأصلي
+        </p>
         {items.map(item => {
           const key = item.name;
-          const hasOverride = !!overrides[key];
+          const hasOverridePrice = !!overrides[key];
+          const hasOverrideName  = !!nameOverrides[key];
+          const hasAny = hasOverridePrice || hasOverrideName;
           return (
             <div key={key}
-              className={`flex items-center gap-3 px-4 py-3 rounded-xl border transition-all ${
-                hasOverride ? "border-primary/40 bg-primary/5" : "border-white/10 bg-white/5"
+              className={`flex flex-col gap-2 px-4 py-3 rounded-xl border transition-all ${
+                hasAny ? "border-primary/40 bg-primary/5" : "border-white/10 bg-white/5"
               }`}>
-              <span className="flex-1 text-white/90 text-sm font-heading">{item.name}</span>
-              <span className="text-white/30 text-xs">أصلي: {item.price} DA</span>
-              <div className="flex items-center gap-1">
-                <input
-                  type="text"
-                  placeholder={item.price}
-                  value={overrides[key] ?? ""}
-                  onChange={e => {
-                    const val = e.target.value;
-                    const next = { ...overrides };
-                    if (val) next[key] = val; else delete next[key];
-                    setOverrides(next);
-                  }}
-                  className="w-24 bg-white/10 border border-white/20 focus:border-primary rounded-lg px-2 py-1.5 text-white text-sm outline-none text-center"
-                />
-                <span className="text-white/40 text-xs">DA</span>
+              {/* top row: original name + badges */}
+              <div className="flex items-center gap-2">
+                <span className="text-white/40 text-[11px]">أصلي:</span>
+                <span className="text-white/60 text-xs font-heading">{item.name}</span>
+                <span className="text-white/25 text-[11px] mx-1">·</span>
+                <span className="text-white/40 text-[11px]">{item.price} DA</span>
+                {hasAny && (
+                  <button onClick={() => {
+                    const np = { ...overrides }; delete np[key];
+                    const nn = { ...nameOverrides }; delete nn[key];
+                    setOverrides(np);
+                    setNameOverrides(nn);
+                  }} className="ml-auto text-white/25 hover:text-red-400 transition-colors">
+                    <Trash2 size={13}/>
+                  </button>
+                )}
               </div>
-              {hasOverride && (
-                <button onClick={() => {
-                  const next = { ...overrides };
-                  delete next[key];
-                  setOverrides(next);
-                }} className="text-white/30 hover:text-red-400 transition-colors">
-                  <Trash2 size={14}/>
-                </button>
-              )}
+
+              {/* inputs row */}
+              <div className="flex items-center gap-2">
+                {/* name input */}
+                <div className="flex-1 flex items-center gap-1">
+                  <Pencil size={12} className="text-white/30 flex-shrink-0"/>
+                  <input
+                    type="text"
+                    placeholder={item.name}
+                    value={nameOverrides[key] ?? ""}
+                    onChange={e => {
+                      const val = e.target.value;
+                      const next = { ...nameOverrides };
+                      if (val) next[key] = val; else delete next[key];
+                      setNameOverrides(next);
+                    }}
+                    className="flex-1 min-w-0 bg-white/10 border border-white/20 focus:border-primary rounded-lg px-2 py-1.5 text-white text-sm outline-none"
+                  />
+                </div>
+
+                {/* price input */}
+                <div className="flex items-center gap-1 flex-shrink-0">
+                  <input
+                    type="text"
+                    placeholder={item.price}
+                    value={overrides[key] ?? ""}
+                    onChange={e => {
+                      const val = e.target.value;
+                      const next = { ...overrides };
+                      if (val) next[key] = val; else delete next[key];
+                      setOverrides(next);
+                    }}
+                    className="w-20 bg-white/10 border border-white/20 focus:border-primary rounded-lg px-2 py-1.5 text-white text-sm outline-none text-center"
+                  />
+                  <span className="text-white/40 text-xs">DA</span>
+                </div>
+              </div>
             </div>
           );
         })}
@@ -210,14 +246,91 @@ function PromosTab({
   );
 }
 
+// ─── Cloudinary Upload Button ─────────────────────────────
+function CloudinaryUpload({
+  onUploaded,
+}: {
+  onUploaded: (url: string) => void;
+}) {
+  const inputRef = useRef<HTMLInputElement>(null);
+  const [uploading, setUploading] = useState(false);
+  const [preview, setPreview] = useState<string>("");
+  const [error, setError] = useState("");
+
+  const handleFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setError("");
+    setUploading(true);
+
+    // local preview
+    const local = URL.createObjectURL(file);
+    setPreview(local);
+
+    try {
+      const url = await uploadToCloudinary(file);
+      setPreview(url);
+      onUploaded(url);
+    } catch {
+      setError("فشل الرفع — تحقق من إعدادات Cloudinary");
+      setPreview("");
+    } finally {
+      setUploading(false);
+      // reset so same file can be re-selected
+      e.target.value = "";
+    }
+  };
+
+  return (
+    <div className="flex flex-col gap-2">
+      <input
+        ref={inputRef}
+        type="file"
+        accept="image/*"
+        capture="environment"
+        className="hidden"
+        onChange={handleFile}
+      />
+      <button
+        type="button"
+        onClick={() => inputRef.current?.click()}
+        disabled={uploading}
+        className="flex items-center justify-center gap-2 bg-white/10 border border-white/20 hover:border-primary rounded-xl px-4 py-3 text-white text-sm font-heading uppercase tracking-widest transition-all disabled:opacity-50"
+      >
+        {uploading
+          ? <><Loader2 size={16} className="animate-spin"/> جاري الرفع...</>
+          : <><Upload size={16}/> رفع صورة من الهاتف</>
+        }
+      </button>
+
+      {preview && !uploading && (
+        <div className="relative w-full h-32 rounded-xl overflow-hidden border border-primary/30">
+          <img src={preview} alt="preview" className="w-full h-full object-cover"/>
+          <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
+            <Check size={24} className="text-green-400"/>
+          </div>
+        </div>
+      )}
+
+      {!preview && !uploading && (
+        <div className="w-full h-24 rounded-xl border border-dashed border-white/10 flex items-center justify-center">
+          <ImageIcon size={24} className="text-white/20"/>
+        </div>
+      )}
+
+      {error && <p className="text-red-400 text-xs text-center">{error}</p>}
+    </div>
+  );
+}
+
 // ─── Offers Tab ───────────────────────────────────────────
 const ACCENT_OPTIONS = [
-  { label: "ذهبي", value: "#ffb800" },
-  { label: "أزرق", value: "#00d4ff" },
-  { label: "أخضر", value: "#00e8a0" },
-  { label: "وردي", value: "#ff5fa0" },
+  { label: "ذهبي",    value: "#ffb800" },
+  { label: "أزرق",    value: "#00d4ff" },
+  { label: "أخضر",    value: "#00e8a0" },
+  { label: "وردي",    value: "#ff5fa0" },
   { label: "برتقالي", value: "#ff8c00" },
-  { label: "أحمر", value: "#ff3a3a" },
+  { label: "أحمر",    value: "#ff3a3a" },
 ];
 
 function OffersTab({
@@ -310,11 +423,29 @@ function OffersTab({
             className="bg-white/10 border border-white/20 focus:border-primary rounded-lg px-3 py-2 text-white text-sm outline-none"/>
         </div>
 
-        <div className="flex flex-col gap-1">
-          <label className="text-white/40 text-[11px]">رابط الصورة (Cloudinary أو أي رابط) *</label>
-          <input value={form.image} onChange={e => setForm(f => ({ ...f, image: e.target.value }))}
+        {/* Image upload section */}
+        <div className="flex flex-col gap-2">
+          <label className="text-white/40 text-[11px]">صورة العرض *</label>
+
+          {/* Upload from phone */}
+          <CloudinaryUpload onUploaded={url => setForm(f => ({ ...f, image: url }))} />
+
+          {/* OR paste URL manually */}
+          <div className="flex items-center gap-2 my-1">
+            <div className="flex-1 h-px bg-white/10"/>
+            <span className="text-white/20 text-[10px]">أو أدخل الرابط يدوياً</span>
+            <div className="flex-1 h-px bg-white/10"/>
+          </div>
+          <input
+            value={form.image}
+            onChange={e => setForm(f => ({ ...f, image: e.target.value }))}
             placeholder="https://res.cloudinary.com/..."
-            className="bg-white/10 border border-white/20 focus:border-primary rounded-lg px-3 py-2 text-white text-sm outline-none"/>
+            className="bg-white/10 border border-white/20 focus:border-primary rounded-lg px-3 py-2 text-white text-sm outline-none"
+          />
+          {form.image && (
+            <img src={form.image} alt="preview"
+              className="w-full h-28 object-cover rounded-xl border border-white/10 mt-1"/>
+          )}
         </div>
 
         <div className="flex flex-col gap-2">
@@ -345,31 +476,31 @@ function OffersTab({
 // ─── Main Dashboard ───────────────────────────────────────
 export default function Dashboard() {
   const { refresh } = useAdminData();
-  const [authed, setAuthed] = useState(false);
-  const [tab, setTab] = useState<Tab>("menu");
-  const [saving, setSaving] = useState(false);
-  const [saved, setSaved] = useState(false);
+  const [authed, setAuthed]     = useState(false);
+  const [tab, setTab]           = useState<Tab>("menu");
+  const [saving, setSaving]     = useState(false);
+  const [saved, setSaved]       = useState(false);
+  const [saveError, setSaveError] = useState(false);
 
-  const [overrides, setOverrides]     = useState<Record<string, string>>({});
-  const [promos, setPromos]           = useState<Record<string, string>>({});
-  const [extraOffers, setExtraOffers] = useState<ExtraOffer[]>([]);
+  const [overrides, setOverrides]         = useState<Record<string, string>>({});
+  const [nameOverrides, setNameOverrides] = useState<Record<string, string>>({});
+  const [promos, setPromos]               = useState<Record<string, string>>({});
+  const [extraOffers, setExtraOffers]     = useState<ExtraOffer[]>([]);
 
-  // Load from JSONBin when authed
   useEffect(() => {
     if (!authed) return;
     fetchAdminData().then(d => {
       setOverrides(d.menuOverrides ?? {});
+      setNameOverrides(d.nameOverrides ?? {});
       setPromos(d.promos ?? {});
       setExtraOffers(d.extraOffers ?? []);
     });
   }, [authed]);
 
-  const [saveError, setSaveError] = useState(false);
-
   const handleSave = async () => {
     setSaving(true);
     setSaveError(false);
-    const data: AdminData = { menuOverrides: overrides, promos, extraOffers };
+    const data: AdminData = { menuOverrides: overrides, nameOverrides, promos, extraOffers };
     const ok = await saveAdminData(data);
     if (ok) {
       await refresh();
@@ -453,8 +584,13 @@ export default function Dashboard() {
             transition={{ duration: 0.15 }}
             className="h-full"
           >
-            {tab === "menu"   && <MenuTab   overrides={overrides}     setOverrides={setOverrides}/>}
-            {tab === "promos" && <PromosTab promos={promos}           setPromos={setPromos}/>}
+            {tab === "menu" && (
+              <MenuTab
+                overrides={overrides}     setOverrides={setOverrides}
+                nameOverrides={nameOverrides} setNameOverrides={setNameOverrides}
+              />
+            )}
+            {tab === "promos" && <PromosTab promos={promos} setPromos={setPromos}/>}
             {tab === "offers" && <OffersTab extraOffers={extraOffers} setExtraOffers={setExtraOffers}/>}
           </motion.div>
         </AnimatePresence>
