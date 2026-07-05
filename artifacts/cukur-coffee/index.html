@@ -2,33 +2,6 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <script>
-      // Restore path redirected from 404.html - FIXED VERSION
-      (function () {
-        var search = window.location.search;
-        if (search && search.indexOf('?p=') === 0) {
-          var params = search.substring(1).split('&');
-          var path = '';
-          var query = '';
-          
-          params.forEach(function (param) {
-            if (param.startsWith('p=')) {
-              // Decode the path parameter
-              path = decodeURIComponent(param.substring(2));
-            }
-            if (param.startsWith('q=')) {
-              query = '?' + decodeURIComponent(param.substring(2));
-            }
-          });
-          
-          // Only update if we have a valid path
-          if (path && path !== '/') {
-            var newUrl = window.location.pathname + path + query + window.location.hash;
-            window.history.replaceState(null, null, newUrl);
-          }
-        }
-      })();
-    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
     <title>Çukur Coffee</title>
     <meta name="description" content="Çukur Coffee — built on Replit. Update this description to reflect the app." />
