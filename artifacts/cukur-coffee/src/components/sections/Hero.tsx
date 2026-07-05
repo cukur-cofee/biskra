@@ -79,8 +79,14 @@ export default function Hero() {
       {/* Sticker — توصيل مجاني */}
       <motion.div
         initial={{ opacity: 0, scale: 0.5, rotate: -20 }}
-        animate={{ opacity: 1, scale: 1, rotate: -12 }}
-        transition={{ duration: 0.7, delay: 1.2, type: "spring", bounce: 0.5 }}
+        animate={[
+          { opacity: 1, scale: 1, rotate: -12 },
+          { rotate: [-12, -6, -16, -12], y: [0, -8, 4, 0] },
+        ]}
+        transition={[
+          { duration: 0.7, delay: 1.2, type: "spring", bounce: 0.5 },
+          { duration: 3.5, delay: 1.9, repeat: Infinity, ease: "easeInOut" },
+        ]}
         className="absolute top-28 left-5 md:bottom-auto md:top-32 md:right-12 md:left-auto z-20 select-none"
         style={{ width: "130px", height: "130px" }}
       >
