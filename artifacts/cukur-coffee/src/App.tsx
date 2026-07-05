@@ -25,11 +25,15 @@ function Router() {
 }
 
 function App() {
-  const isAdmin = window.location.hash.includes("/admin");
-  const [loading, setLoading] = useState(!isAdmin);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     document.documentElement.classList.add("dark");
+    // Finish loading immediately when component mounts
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 100);
+    return () => clearTimeout(timer);
   }, []);
 
   const handleLoaderFinished = useCallback(() => {
@@ -40,18 +44,19 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <AdminDataProvider>
         <TooltipProvider>
-          <AnimatePresence>
-            {loading && (
+          <AnimatePresence mode="wait">
+            {loading ? (
               <VideoLoader key="loader" onFinished={handleLoaderFinished} />
+            ) : (
+              <CartProvider key="content">
+                <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, "")} hashBased>
+                  <Router />
+                </WouterRouter>
+                <CartDrawer />
+                <Toaster />
+              </CartProvider>
             )}
           </AnimatePresence>
-          <CartProvider>
-            <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, "")} hashBased>
-              <Router />
-            </WouterRouter>
-            <CartDrawer />
-            <Toaster />
-          </CartProvider>
         </TooltipProvider>
       </AdminDataProvider>
     </QueryClientProvider>
