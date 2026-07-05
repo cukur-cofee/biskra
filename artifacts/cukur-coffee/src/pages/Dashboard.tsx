@@ -364,14 +364,20 @@ export default function Dashboard() {
     });
   }, [authed]);
 
+  const [saveError, setSaveError] = useState(false);
+
   const handleSave = async () => {
     setSaving(true);
+    setSaveError(false);
     const data: AdminData = { menuOverrides: overrides, promos, extraOffers };
     const ok = await saveAdminData(data);
     if (ok) {
       await refresh();
       setSaved(true);
       setTimeout(() => setSaved(false), 2500);
+    } else {
+      setSaveError(true);
+      setTimeout(() => setSaveError(false), 4000);
     }
     setSaving(false);
   };
@@ -395,6 +401,15 @@ export default function Dashboard() {
                 exit={{ opacity: 0 }}
                 className="flex items-center gap-1 text-green-400 text-sm">
                 <Check size={14}/> تم الحفظ
+              </motion.span>
+            )}
+            {saveError && (
+              <motion.span
+                initial={{ opacity: 0, x: 10 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0 }}
+                className="flex items-center gap-1 text-red-400 text-sm">
+                ⚠ فشل الحفظ، تحقق من الاتصال
               </motion.span>
             )}
           </AnimatePresence>
