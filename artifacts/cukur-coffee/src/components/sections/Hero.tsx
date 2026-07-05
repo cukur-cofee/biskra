@@ -98,7 +98,7 @@ export default function Hero() {
             <span
               className="font-black text-white text-center leading-tight"
               style={{
-                fontSize: "13px",
+                fontSize: "16px",
                 textShadow: "0 1px 3px rgba(0,0,0,0.6)",
                 letterSpacing: "0.02em",
                 direction: "rtl",
