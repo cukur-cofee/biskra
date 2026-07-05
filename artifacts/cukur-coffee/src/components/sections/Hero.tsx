@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 const heroImageMobile = "https://res.cloudinary.com/sfdktww4/image/upload/hero-mobile.png";
 const heroImageDesktop = "https://res.cloudinary.com/sfdktww4/image/upload/hero-desktop.png";
+const stickerUrl = "https://res.cloudinary.com/sfdktww4/image/upload/v1783286322/sticker-red.png";
 
 export default function Hero() {
   return (
@@ -74,6 +75,42 @@ export default function Hero() {
           </a>
         </motion.div>
       </div>
+
+      {/* Sticker — توصيل مجاني */}
+      <motion.div
+        initial={{ opacity: 0, scale: 0.5, rotate: -20 }}
+        animate={{ opacity: 1, scale: 1, rotate: -12 }}
+        transition={{ duration: 0.7, delay: 1.2, type: "spring", bounce: 0.5 }}
+        className="absolute bottom-24 right-6 md:bottom-auto md:top-32 md:right-12 z-20 select-none"
+        style={{ width: "110px", height: "110px" }}
+      >
+        <div className="relative w-full h-full">
+          <img
+            src={stickerUrl}
+            alt="توصيل مجاني"
+            className="w-full h-full object-contain drop-shadow-2xl"
+          />
+          {/* Text on top of sticker */}
+          <div
+            className="absolute inset-0 flex flex-col items-center justify-center"
+            style={{ paddingBottom: "12px" }}
+          >
+            <span
+              className="font-black text-white text-center leading-tight"
+              style={{
+                fontSize: "13px",
+                textShadow: "0 1px 3px rgba(0,0,0,0.6)",
+                letterSpacing: "0.02em",
+                direction: "rtl",
+              }}
+            >
+              توصيل
+              <br />
+              مجاني
+            </span>
+          </div>
+        </div>
+      </motion.div>
 
       {/* Scroll Indicator */}
       <motion.div
