@@ -3,21 +3,29 @@
   <head>
     <meta charset="UTF-8" />
     <script>
-      // Restore path redirected from 404.html
+      // Restore path redirected from 404.html - FIXED VERSION
       (function () {
-        var q = window.location.search;
-        if (q && q.indexOf('?p=') === 0) {
-          var params = q.slice(1).split('&');
+        var search = window.location.search;
+        if (search && search.indexOf('?p=') === 0) {
+          var params = search.substring(1).split('&');
           var path = '';
           var query = '';
-          params.forEach(function (p) {
-            if (p.indexOf('p=') === 0) path = '/' + p.slice(2);
-            if (p.indexOf('q=') === 0) query = '?' + p.slice(2);
+          
+          params.forEach(function (param) {
+            if (param.startsWith('p=')) {
+              // Decode the path parameter
+              path = decodeURIComponent(param.substring(2));
+            }
+            if (param.startsWith('q=')) {
+              query = '?' + decodeURIComponent(param.substring(2));
+            }
           });
-          window.history.replaceState(
-            null, null,
-            window.location.pathname.replace(/\/+$/, '') + path + query + window.location.hash
-          );
+          
+          // Only update if we have a valid path
+          if (path && path !== '/') {
+            var newUrl = window.location.pathname + path + query + window.location.hash;
+            window.history.replaceState(null, null, newUrl);
+          }
         }
       })();
     </script>
