@@ -81,8 +81,8 @@ export default function Hero() {
         initial={{ opacity: 0, scale: 0.5, rotate: -20 }}
         animate={{ opacity: 1, scale: 1, rotate: -12 }}
         transition={{ duration: 0.7, delay: 1.2, type: "spring", bounce: 0.5 }}
-        className="absolute bottom-24 right-6 md:bottom-auto md:top-32 md:right-12 z-20 select-none"
-        style={{ width: "110px", height: "110px" }}
+        className="absolute top-28 left-5 md:bottom-auto md:top-32 md:right-12 md:left-auto z-20 select-none"
+        style={{ width: "130px", height: "130px" }}
       >
         <div className="relative w-full h-full">
           <img
