@@ -4,14 +4,18 @@
   <meta charset="utf-8">
   <title>Çukur Coffee</title>
   <script>
-    // GitHub Pages SPA redirect — keeps /biskra/ as the base segment
-    var l = window.location;
-    l.replace(
-      l.protocol + '//' + l.hostname + (l.port ? ':' + l.port : '') +
-      l.pathname.split('/').slice(0, 2).join('/') +
-      '/?p=/' + l.pathname.slice(1).split('/').slice(1).join('/') +
-      (l.search ? '&q=' + l.search.slice(1) : '') +
-      l.hash
+    // GitHub Pages SPA redirect for https://cukur-cofee.github.io/biskra/
+    var pathArray = window.location.pathname.split('/').filter(Boolean);
+    var repoIndex = pathArray.indexOf('biskra');
+    
+    // Extract the route after /biskra/
+    var route = '/' + pathArray.slice(repoIndex + 1).join('/');
+    
+    // Redirect to index.html with the route preserved
+    window.location.replace(
+      '/biskra/?p=' + encodeURIComponent(route) +
+      (window.location.search ? '&q=' + window.location.search.slice(1) : '') +
+      window.location.hash
     );
   </script>
 </head>
