@@ -25,11 +25,22 @@ function Router() {
 }
 
 function App() {
-  const isAdmin = window.location.pathname.endsWith("/admin");
+  // Support both direct pathname and hash-based routing
+  const pathname = window.location.pathname;
+  const isAdmin = pathname.includes("/admin") || window.location.hash === "#/admin";
   const [loading, setLoading] = useState(!isAdmin);
 
   useEffect(() => {
     document.documentElement.classList.add("dark");
+    
+    // Handle redirect from 404.html with query parameter
+    const params = new URLSearchParams(window.location.search);
+    const redirectPath = params.get('p');
+    
+    if (redirectPath && redirectPath !== '/') {
+      // Update the URL without reloading
+      window.history.replaceState(null, '', window.location.pathname.replace(/\/$/, '') + redirectPath);
+    }
   }, []);
 
   const handleLoaderFinished = useCallback(() => {
