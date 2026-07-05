@@ -1,13 +1,14 @@
 import { useState } from "react";
-import { Link } from "wouter";
+import { Link, useLocation } from "wouter";
 import { motion, useScroll, useMotionValueEvent } from "framer-motion";
-import { Menu, X, Phone, ShoppingCart } from "lucide-react";
+import { Menu, X, Phone, ShoppingCart, Lock } from "lucide-react";
 const logoPath = "https://res.cloudinary.com/sfdktww4/image/upload/logo.png";
 import { useCart } from "@/context/CartContext";
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [, setLocation] = useLocation();
   const { scrollY } = useScroll();
   const { totalItems, openCart } = useCart();
 
@@ -22,6 +23,11 @@ export default function Navbar() {
     { name: "Gallery", href: "#gallery" },
     { name: "Contact", href: "#footer" },
   ];
+
+  const handleAdminClick = () => {
+    setLocation("/#/admin");
+    setMobileMenuOpen(false);
+  };
 
   return (
     <motion.header
@@ -81,6 +87,16 @@ export default function Navbar() {
                 {totalItems}
               </motion.span>
             )}
+          </button>
+
+          {/* Admin button */}
+          <button
+            onClick={handleAdminClick}
+            className="flex items-center gap-2 text-primary hover:text-primary/80 transition-colors"
+            title="Admin Panel"
+            data-testid="button-admin"
+          >
+            <Lock size={18} />
           </button>
 
           <a
@@ -147,8 +163,16 @@ export default function Navbar() {
               <span className="font-medium tracking-wider">07 93 51 37 80</span>
             </a>
             <button
+              onClick={handleAdminClick}
+              className="flex items-center justify-center gap-2 bg-card/50 border border-primary/30 text-primary px-8 py-3 rounded-lg text-sm font-heading uppercase tracking-widest w-full hover:bg-card transition-colors"
+              data-testid="button-admin-mobile"
+            >
+              <Lock size={16} />
+              Admin Panel
+            </button>
+            <button
               onClick={() => { openCart(); setMobileMenuOpen(false); }}
-              className="flex items-center justify-center gap-2 bg-card/50 border border-primary/30 text-primary px-8 py-3 rounded-lg text-sm font-heading uppercase tracking-widest w-full hover:bg-primary/10 transition-colors"
+              className="flex items-center justify-center gap-2 bg-card/50 border border-primary/30 text-primary px-8 py-3 rounded-lg text-sm font-heading uppercase tracking-widest w-full hover:bg-card transition-colors"
               data-testid="button-view-cart-menu"
             >
               <ShoppingCart size={16} />
