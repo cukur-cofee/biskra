@@ -2,6 +2,25 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <script>
+      // Restore path redirected from 404.html
+      (function () {
+        var q = window.location.search;
+        if (q && q.indexOf('?p=') === 0) {
+          var params = q.slice(1).split('&');
+          var path = '';
+          var query = '';
+          params.forEach(function (p) {
+            if (p.indexOf('p=') === 0) path = '/' + p.slice(2);
+            if (p.indexOf('q=') === 0) query = '?' + p.slice(2);
+          });
+          window.history.replaceState(
+            null, null,
+            window.location.pathname + path + query + window.location.hash
+          );
+        }
+      })();
+    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
     <title>Çukur Coffee</title>
     <meta name="description" content="Çukur Coffee — built on Replit. Update this description to reflect the app." />
