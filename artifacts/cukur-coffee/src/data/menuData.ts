@@ -19,7 +19,7 @@ export const menuData = {
   ],
   items: [
     // Café
-    { name: "Belounghi", price: "50", category: "Café" },
+    { name: "Delonghi", price: "50", category: "Café" },
     { name: "Café au lait", price: "100", category: "Café" },
     { name: "Turkish Coffee", price: "200", category: "Café" },
     { name: "Caps", price: "100", category: "Café" },
