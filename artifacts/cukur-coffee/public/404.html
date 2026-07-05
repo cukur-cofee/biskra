@@ -4,28 +4,26 @@
   <meta charset="utf-8">
   <title>Çukur Coffee</title>
   <script>
-    // GitHub Pages SPA redirect for https://cukur-cofee.github.io/biskra/
-    var pathname = window.location.pathname;
+    // GitHub Pages SPA redirect - SIMPLE AND DIRECT
+    var pathname = decodeURIComponent(window.location.pathname);
+    var parts = pathname.split('/').filter(Boolean);
     
-    // Decode the pathname in case it's encoded
-    var decodedPath = decodeURIComponent(pathname);
-    
-    var pathArray = decodedPath.split('/').filter(Boolean);
-    var repoIndex = pathArray.indexOf('biskra');
-    
-    // Extract the route after /biskra/
-    var route = '/' + pathArray.slice(repoIndex + 1).join('/');
-    
-    // If route is just "/", don't pass it as a param
-    if (route === '/') {
-      window.location.replace('/biskra/');
-    } else {
-      // Redirect to index.html with the route preserved
-      window.location.replace(
-        '/biskra/?p=' + encodeURIComponent(route) +
-        (window.location.search ? '&q=' + window.location.search.slice(1) : '') +
-        window.location.hash
-      );
+    // Find 'biskra' and get everything after it
+    var biskaIndex = parts.indexOf('biskra');
+    if (biskaIndex !== -1) {
+      var route = parts.slice(biskaIndex + 1).join('/');
+      
+      // If there's a route (not just /biskra/), redirect with query param
+      if (route) {
+        window.location.replace(
+          '/biskra/?p=/' + route +
+          (window.location.search ? '&' + window.location.search.substring(1) : '') +
+          window.location.hash
+        );
+      } else {
+        // Just /biskra/, go to root
+        window.location.replace('/biskra/');
+      }
     }
   </script>
 </head>
