@@ -4,27 +4,8 @@
   <meta charset="utf-8">
   <title>Çukur Coffee</title>
   <script>
-    // GitHub Pages SPA redirect - SIMPLE AND DIRECT
-    var pathname = decodeURIComponent(window.location.pathname);
-    var parts = pathname.split('/').filter(Boolean);
-    
-    // Find 'biskra' and get everything after it
-    var biskaIndex = parts.indexOf('biskra');
-    if (biskaIndex !== -1) {
-      var route = parts.slice(biskaIndex + 1).join('/');
-      
-      // If there's a route (not just /biskra/), redirect with query param
-      if (route) {
-        window.location.replace(
-          '/biskra/?p=/' + route +
-          (window.location.search ? '&' + window.location.search.substring(1) : '') +
-          window.location.hash
-        );
-      } else {
-        // Just /biskra/, go to root
-        window.location.replace('/biskra/');
-      }
-    }
+    // Redirect any 404 to home with hash routing
+    window.location.replace('/biskra/#' + window.location.pathname.replace(/\/biskra\/?/, '/'));
   </script>
 </head>
 <body></body>
