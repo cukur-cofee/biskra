@@ -31,11 +31,20 @@ export interface ExtraOffer {
   tagline?: string;
 }
 
+export interface CustomMenuItem {
+  id: number;
+  name: string;
+  price: string;
+  category: string;
+}
+
 export interface AdminData {
   menuOverrides: Record<string, string>;   // { "Latte": "350" }      — price
   nameOverrides: Record<string, string>;   // { "Latte": "Latte X" }  — name
   promos: Record<string, string>;          // { "Latte": "جديد" }
   extraOffers: ExtraOffer[];
+  hiddenItems: string[];                   // original names of hidden items
+  customItems: CustomMenuItem[];           // admin-added items
 }
 
 export const defaultAdminData: AdminData = {
@@ -43,6 +52,8 @@ export const defaultAdminData: AdminData = {
   nameOverrides: {},
   promos: {},
   extraOffers: [],
+  hiddenItems: [],
+  customItems: [],
 };
 
 export async function fetchAdminData(): Promise<AdminData> {

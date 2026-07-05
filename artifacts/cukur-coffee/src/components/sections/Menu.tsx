@@ -50,15 +50,21 @@ export default function Menu() {
   const [direction, setDirection] = useState(0);
   const tabsRef = useRef<HTMLDivElement>(null);
   const activeTabRef = useRef<HTMLButtonElement | null>(null);
-  const { menuOverrides, nameOverrides, promos } = useAdminData();
+  const { menuOverrides, nameOverrides, promos, hiddenItems, customItems } = useAdminData();
 
   const activeIndex = menuData.categories.indexOf(activeCategory);
-  const rawItems = menuData.items.filter((item) => item.category === activeCategory);
-  const activeItems = rawItems.map(item => ({
-    ...item,
-    name:  nameOverrides[item.name]  ?? item.name,
-    price: menuOverrides[item.name] ?? item.price,
-  }));
+  const rawItems = menuData.items.filter(
+    (item) => item.category === activeCategory && !(hiddenItems ?? []).includes(item.name)
+  );
+  const catCustom = (customItems ?? []).filter(i => i.category === activeCategory);
+  const activeItems = [
+    ...rawItems.map(item => ({
+      ...item,
+      name:  nameOverrides[item.name]  ?? item.name,
+      price: menuOverrides[item.name] ?? item.price,
+    })),
+    ...catCustom,
+  ];
   const isFirstRender = useRef(true);
 
   const handleCategoryChange = (cat: string) => {

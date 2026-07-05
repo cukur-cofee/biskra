@@ -1,8 +1,8 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Save, LogOut, Plus, Trash2, Tag, Coffee, Sun, Check, Loader2, Eye, EyeOff, Upload, ImageIcon, Pencil } from "lucide-react";
+import { Save, LogOut, Plus, Trash2, Tag, Coffee, Sun, Check, Loader2, Eye, EyeOff, Upload, ImageIcon, Pencil, X } from "lucide-react";
 import { menuData } from "@/data/menuData";
-import { saveAdminData, fetchAdminData, uploadToCloudinary, type AdminData, type ExtraOffer } from "@/lib/jsonbin";
+import { saveAdminData, fetchAdminData, uploadToCloudinary, type AdminData, type ExtraOffer, type CustomMenuItem } from "@/lib/jsonbin";
 import { useAdminData } from "@/context/AdminDataContext";
 
 const ADMIN_PASSWORD = "cukur2026";
@@ -68,107 +68,196 @@ const tabs: { id: Tab; label: string; icon: React.ElementType }[] = [
   { id: "offers", label: "عروض الصيف",        icon: Sun   },
 ];
 
-// ─── Menu Tab (price + name editing) ──────────────────────
+// ─── Menu Tab (price + name editing + add/hide items) ─────
 function MenuTab({
   overrides, setOverrides,
   nameOverrides, setNameOverrides,
+  hiddenItems, setHiddenItems,
+  customItems, setCustomItems,
 }: {
   overrides: Record<string, string>;
   setOverrides: (v: Record<string, string>) => void;
   nameOverrides: Record<string, string>;
   setNameOverrides: (v: Record<string, string>) => void;
+  hiddenItems: string[];
+  setHiddenItems: (v: string[]) => void;
+  customItems: CustomMenuItem[];
+  setCustomItems: (v: CustomMenuItem[]) => void;
 }) {
   const [activeCategory, setActiveCategory] = useState(menuData.categories[0]);
+  const [newName, setNewName]   = useState("");
+  const [newPrice, setNewPrice] = useState("");
   const items = menuData.items.filter(i => i.category === activeCategory);
+  const catCustom = customItems.filter(i => i.category === activeCategory);
+
+  const toggleHide = (name: string) => {
+    if (hiddenItems.includes(name))
+      setHiddenItems(hiddenItems.filter(n => n !== name));
+    else
+      setHiddenItems([...hiddenItems, name]);
+  };
+
+  const addCustom = () => {
+    if (!newName.trim() || !newPrice.trim()) return;
+    setCustomItems([...customItems, {
+      id: Date.now(),
+      name: newName.trim(),
+      price: newPrice.trim(),
+      category: activeCategory,
+    }]);
+    setNewName("");
+    setNewPrice("");
+  };
+
+  const deleteCustom = (id: number) =>
+    setCustomItems(customItems.filter(i => i.id !== id));
 
   return (
     <div className="flex gap-4 h-full">
       {/* sidebar */}
       <div className="w-44 flex-shrink-0 flex flex-col gap-1 overflow-y-auto pr-1">
-        {menuData.categories.map(cat => (
-          <button key={cat} onClick={() => setActiveCategory(cat)}
-            className={`text-left text-xs px-3 py-2 rounded-lg font-heading uppercase tracking-wide transition-all ${
-              activeCategory === cat
-                ? "bg-primary text-black font-bold"
-                : "text-white/50 hover:text-white hover:bg-white/5"
-            }`}>
-            {cat}
-          </button>
-        ))}
+        {menuData.categories.map(cat => {
+          const hidden = menuData.items.filter(i => i.category === cat && hiddenItems.includes(i.name)).length;
+          const added  = customItems.filter(i => i.category === cat).length;
+          return (
+            <button key={cat} onClick={() => { setActiveCategory(cat); setNewName(""); setNewPrice(""); }}
+              className={`text-left text-xs px-3 py-2 rounded-lg font-heading uppercase tracking-wide transition-all ${
+                activeCategory === cat
+                  ? "bg-primary text-black font-bold"
+                  : "text-white/50 hover:text-white hover:bg-white/5"
+              }`}>
+              <span>{cat}</span>
+              <span className="flex gap-1 mt-0.5">
+                {hidden > 0 && <span className="text-[9px] text-red-400/70">−{hidden}</span>}
+                {added  > 0 && <span className="text-[9px] text-green-400/70">+{added}</span>}
+              </span>
+            </button>
+          );
+        })}
       </div>
 
       {/* items */}
-      <div className="flex-1 flex flex-col gap-2 overflow-y-auto">
+      <div className="flex-1 flex flex-col gap-2 overflow-y-auto pb-2">
         <p className="text-white/30 text-[11px] mb-1 flex items-center gap-1">
-          <Pencil size={11}/> يمكنك تعديل اسم المنتج والسعر — اتركه فارغاً للإبقاء على الأصلي
+          <Pencil size={11}/> عدّل الاسم والسعر · <Eye size={11}/> أخفِ · <Plus size={11}/> أضف منتجاً جديداً
         </p>
+
+        {/* ── original items ── */}
         {items.map(item => {
           const key = item.name;
+          const isHidden = hiddenItems.includes(key);
           const hasOverridePrice = !!overrides[key];
           const hasOverrideName  = !!nameOverrides[key];
           const hasAny = hasOverridePrice || hasOverrideName;
           return (
             <div key={key}
               className={`flex flex-col gap-2 px-4 py-3 rounded-xl border transition-all ${
-                hasAny ? "border-primary/40 bg-primary/5" : "border-white/10 bg-white/5"
+                isHidden
+                  ? "border-red-500/20 bg-red-500/5 opacity-50"
+                  : hasAny
+                    ? "border-primary/40 bg-primary/5"
+                    : "border-white/10 bg-white/5"
               }`}>
-              {/* top row: original name + badges */}
+              {/* top row */}
               <div className="flex items-center gap-2">
-                <span className="text-white/40 text-[11px]">أصلي:</span>
-                <span className="text-white/60 text-xs font-heading">{item.name}</span>
-                <span className="text-white/25 text-[11px] mx-1">·</span>
+                <span className={`text-xs font-heading ${isHidden ? "line-through text-white/30" : "text-white/60"}`}>
+                  {item.name}
+                </span>
+                <span className="text-white/25 text-[11px]">·</span>
                 <span className="text-white/40 text-[11px]">{item.price} DA</span>
-                {hasAny && (
-                  <button onClick={() => {
-                    const np = { ...overrides }; delete np[key];
-                    const nn = { ...nameOverrides }; delete nn[key];
-                    setOverrides(np);
-                    setNameOverrides(nn);
-                  }} className="ml-auto text-white/25 hover:text-red-400 transition-colors">
-                    <Trash2 size={13}/>
+                <div className="ml-auto flex items-center gap-2">
+                  {hasAny && !isHidden && (
+                    <button onClick={() => {
+                      const np = { ...overrides }; delete np[key];
+                      const nn = { ...nameOverrides }; delete nn[key];
+                      setOverrides(np); setNameOverrides(nn);
+                    }} className="text-white/25 hover:text-red-400 transition-colors">
+                      <X size={12}/>
+                    </button>
+                  )}
+                  <button onClick={() => toggleHide(key)}
+                    title={isHidden ? "إظهار" : "إخفاء"}
+                    className={`transition-colors ${isHidden ? "text-green-400/70 hover:text-green-400" : "text-white/25 hover:text-red-400"}`}>
+                    {isHidden ? <Eye size={13}/> : <EyeOff size={13}/>}
                   </button>
-                )}
-              </div>
-
-              {/* inputs row */}
-              <div className="flex items-center gap-2">
-                {/* name input */}
-                <div className="flex-1 flex items-center gap-1">
-                  <Pencil size={12} className="text-white/30 flex-shrink-0"/>
-                  <input
-                    type="text"
-                    placeholder={item.name}
-                    value={nameOverrides[key] ?? ""}
-                    onChange={e => {
-                      const val = e.target.value;
-                      const next = { ...nameOverrides };
-                      if (val) next[key] = val; else delete next[key];
-                      setNameOverrides(next);
-                    }}
-                    className="flex-1 min-w-0 bg-white/10 border border-white/20 focus:border-primary rounded-lg px-2 py-1.5 text-white text-sm outline-none"
-                  />
-                </div>
-
-                {/* price input */}
-                <div className="flex items-center gap-1 flex-shrink-0">
-                  <input
-                    type="text"
-                    placeholder={item.price}
-                    value={overrides[key] ?? ""}
-                    onChange={e => {
-                      const val = e.target.value;
-                      const next = { ...overrides };
-                      if (val) next[key] = val; else delete next[key];
-                      setOverrides(next);
-                    }}
-                    className="w-20 bg-white/10 border border-white/20 focus:border-primary rounded-lg px-2 py-1.5 text-white text-sm outline-none text-center"
-                  />
-                  <span className="text-white/40 text-xs">DA</span>
                 </div>
               </div>
+
+              {/* edit inputs — only when visible */}
+              {!isHidden && (
+                <div className="flex items-center gap-2">
+                  <div className="flex-1 flex items-center gap-1">
+                    <Pencil size={12} className="text-white/30 flex-shrink-0"/>
+                    <input type="text" placeholder={item.name}
+                      value={nameOverrides[key] ?? ""}
+                      onChange={e => {
+                        const val = e.target.value;
+                        const next = { ...nameOverrides };
+                        if (val) next[key] = val; else delete next[key];
+                        setNameOverrides(next);
+                      }}
+                      className="flex-1 min-w-0 bg-white/10 border border-white/20 focus:border-primary rounded-lg px-2 py-1.5 text-white text-sm outline-none"
+                    />
+                  </div>
+                  <div className="flex items-center gap-1 flex-shrink-0">
+                    <input type="text" placeholder={item.price}
+                      value={overrides[key] ?? ""}
+                      onChange={e => {
+                        const val = e.target.value;
+                        const next = { ...overrides };
+                        if (val) next[key] = val; else delete next[key];
+                        setOverrides(next);
+                      }}
+                      className="w-20 bg-white/10 border border-white/20 focus:border-primary rounded-lg px-2 py-1.5 text-white text-sm outline-none text-center"
+                    />
+                    <span className="text-white/40 text-xs">DA</span>
+                  </div>
+                </div>
+              )}
             </div>
           );
         })}
+
+        {/* ── custom items ── */}
+        {catCustom.map(item => (
+          <div key={item.id}
+            className="flex items-center gap-3 px-4 py-3 rounded-xl border border-green-500/30 bg-green-500/5">
+            <span className="text-[9px] font-bold text-green-400/70 uppercase tracking-widest flex-shrink-0">مضاف</span>
+            <span className="flex-1 text-white/80 text-sm font-heading">{item.name}</span>
+            <span className="text-primary text-sm font-heading">{item.price} DA</span>
+            <button onClick={() => deleteCustom(item.id)}
+              className="text-white/25 hover:text-red-400 transition-colors flex-shrink-0">
+              <Trash2 size={14}/>
+            </button>
+          </div>
+        ))}
+
+        {/* ── add new item form ── */}
+        <div className="mt-2 flex items-center gap-2 bg-white/5 border border-dashed border-white/15 rounded-xl px-4 py-3">
+          <Plus size={14} className="text-white/30 flex-shrink-0"/>
+          <input
+            type="text"
+            placeholder="اسم المنتج الجديد"
+            value={newName}
+            onChange={e => setNewName(e.target.value)}
+            onKeyDown={e => e.key === "Enter" && addCustom()}
+            className="flex-1 min-w-0 bg-transparent text-white text-sm outline-none placeholder:text-white/25"
+          />
+          <input
+            type="text"
+            placeholder="السعر"
+            value={newPrice}
+            onChange={e => setNewPrice(e.target.value)}
+            onKeyDown={e => e.key === "Enter" && addCustom()}
+            className="w-20 bg-white/10 border border-white/20 focus:border-primary rounded-lg px-2 py-1.5 text-white text-sm outline-none text-center"
+          />
+          <span className="text-white/40 text-xs">DA</span>
+          <button onClick={addCustom}
+            disabled={!newName.trim() || !newPrice.trim()}
+            className="bg-primary text-black rounded-lg px-3 py-1.5 text-xs font-heading uppercase tracking-widest disabled:opacity-30 transition-opacity flex-shrink-0">
+            إضافة
+          </button>
+        </div>
       </div>
     </div>
   );
@@ -473,6 +562,8 @@ export default function Dashboard() {
   const [nameOverrides, setNameOverrides] = useState<Record<string, string>>({});
   const [promos, setPromos]               = useState<Record<string, string>>({});
   const [extraOffers, setExtraOffers]     = useState<ExtraOffer[]>([]);
+  const [hiddenItems, setHiddenItems]     = useState<string[]>([]);
+  const [customItems, setCustomItems]     = useState<CustomMenuItem[]>([]);
 
   useEffect(() => {
     if (!authed) return;
@@ -481,13 +572,15 @@ export default function Dashboard() {
       setNameOverrides(d.nameOverrides ?? {});
       setPromos(d.promos ?? {});
       setExtraOffers(d.extraOffers ?? []);
+      setHiddenItems(d.hiddenItems ?? []);
+      setCustomItems(d.customItems ?? []);
     });
   }, [authed]);
 
   const handleSave = async () => {
     setSaving(true);
     setSaveError(false);
-    const data: AdminData = { menuOverrides: overrides, nameOverrides, promos, extraOffers };
+    const data: AdminData = { menuOverrides: overrides, nameOverrides, promos, extraOffers, hiddenItems, customItems };
     const ok = await saveAdminData(data);
     if (ok) {
       await refresh();
@@ -573,8 +666,10 @@ export default function Dashboard() {
           >
             {tab === "menu" && (
               <MenuTab
-                overrides={overrides}     setOverrides={setOverrides}
+                overrides={overrides}         setOverrides={setOverrides}
                 nameOverrides={nameOverrides} setNameOverrides={setNameOverrides}
+                hiddenItems={hiddenItems}     setHiddenItems={setHiddenItems}
+                customItems={customItems}     setCustomItems={setCustomItems}
               />
             )}
             {tab === "promos" && <PromosTab promos={promos} setPromos={setPromos}/>}
