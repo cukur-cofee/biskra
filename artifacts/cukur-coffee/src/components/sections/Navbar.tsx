@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useLocation } from "wouter";
+import { useNavigate } from "react-router-dom";
 import { motion, useScroll, useMotionValueEvent } from "framer-motion";
 import { Menu, X, Phone, ShoppingCart, Lock } from "lucide-react";
 const logoPath = "https://res.cloudinary.com/sfdktww4/image/upload/logo.png";
@@ -8,7 +8,7 @@ import { useCart } from "@/context/CartContext";
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [, setLocation] = useLocation();
+  const navigate = useNavigate();
   const { scrollY } = useScroll();
   const { totalItems, openCart } = useCart();
 
@@ -25,8 +25,13 @@ export default function Navbar() {
   ];
 
   const handleAdminClick = () => {
-    setLocation("/#/admin");
+    navigate("/admin");
     setMobileMenuOpen(false);
+  };
+
+  const handleLogoClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    navigate("/");
   };
 
   return (
@@ -41,12 +46,16 @@ export default function Navbar() {
       <div className="container mx-auto px-6 flex items-center justify-between relative">
 
         {/* Logo — centered on mobile, left on desktop */}
-        <Link href="/" className="md:flex items-center gap-3 group absolute left-1/2 -translate-x-1/2 top-2 md:top-auto md:static md:translate-x-0 flex" data-testid="link-home">
+        <button 
+          onClick={handleLogoClick}
+          className="md:flex items-center gap-3 group absolute left-1/2 -translate-x-1/2 top-2 md:top-auto md:static md:translate-x-0 flex bg-none border-none cursor-pointer" 
+          data-testid="link-home"
+        >
           <div className="relative w-20 h-20 md:w-12 md:h-12 rounded-full overflow-hidden border border-primary/50 group-hover:border-primary transition-colors">
             <img src={logoPath} alt="Çukur Coffee Logo" className="object-cover w-full h-full" />
           </div>
           <span className="font-heading text-xl tracking-widest text-primary hidden md:block">ÇUKUR</span>
-        </Link>
+        </button>
 
         {/* Desktop Nav */}
         <nav className="hidden md:flex items-center gap-8">
