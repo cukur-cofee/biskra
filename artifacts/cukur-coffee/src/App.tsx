@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback } from "react";
-import { Switch, Route, Router as WouterRouter, useLocation } from "wouter";
+import { Switch, Route, Router as WouterRouter } from "wouter";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { AnimatePresence } from "framer-motion";
 import { Toaster } from "@/components/ui/toaster";
@@ -24,9 +24,8 @@ function Router() {
   );
 }
 
-function AppContent() {
-  const [location] = useLocation();
-  const isAdmin = location === "/admin";
+function App() {
+  const isAdmin = window.location.hash.includes("/admin");
   const [loading, setLoading] = useState(!isAdmin);
 
   useEffect(() => {
@@ -38,29 +37,21 @@ function AppContent() {
   }, []);
 
   return (
-    <>
-      <AnimatePresence>
-        {loading && (
-          <VideoLoader key="loader" onFinished={handleLoaderFinished} />
-        )}
-      </AnimatePresence>
-      <CartProvider>
-        <CartDrawer />
-        <Toaster />
-      </CartProvider>
-    </>
-  );
-}
-
-function App() {
-  return (
     <QueryClientProvider client={queryClient}>
       <AdminDataProvider>
         <TooltipProvider>
-          <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, "")} hashBased>
-            <Router />
-            <AppContent />
-          </WouterRouter>
+          <AnimatePresence>
+            {loading && (
+              <VideoLoader key="loader" onFinished={handleLoaderFinished} />
+            )}
+          </AnimatePresence>
+          <CartProvider>
+            <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, "")} hashBased>
+              <Router />
+            </WouterRouter>
+            <CartDrawer />
+            <Toaster />
+          </CartProvider>
         </TooltipProvider>
       </AdminDataProvider>
     </QueryClientProvider>
