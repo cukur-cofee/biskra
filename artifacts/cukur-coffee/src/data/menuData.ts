@@ -22,7 +22,7 @@ export const menuData = {
     { name: "Belounghi", price: "50", category: "Café" },
     { name: "Café au lait", price: "100", category: "Café" },
     { name: "Turkish Coffee", price: "200", category: "Café" },
-    { name: "Naps", price: "100", category: "Café" },
+    { name: "Caps", price: "100", category: "Café" },
     { name: "Café d'importation", price: "250", category: "Café" },
     { name: "Latte", price: "250", category: "Café" },
     { name: "Hot Chocolate", price: "300", category: "Café" },
